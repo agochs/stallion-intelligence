@@ -89,18 +89,18 @@ function PedigreeChart({sireId}){
         const leaves = root.leaves().length;   /* number of leaf nodes */
 
         /* ── Size the canvas generously ── */
-        const nodeW = 160;        /* horizontal space per generation */
+        const nodeW = 180;        /* horizontal space per generation */
         const nodeH = 46;         /* vertical space per leaf */
         const padL = 100;         /* left padding for root label */
-        const padR = 30;
+        const padR = 90;          /* right padding (half boxW + margin) */
         const padTB = 20;
 
         const w = padL + (maxDepth + 1) * nodeW + padR;
         const h = Math.max(400, leaves * nodeH + padTB * 2);
 
         svg.attr('width', w).attr('height', h)
-           .attr('viewBox', `0 0 ${w} ${h}`)
-           .style('min-width', w + 'px');
+           .style('min-width', w + 'px')
+           .style('display', 'block');
 
         /* ── Layout ── */
         const layout = d3.tree().size([h - padTB*2, w - padL - padR]);
