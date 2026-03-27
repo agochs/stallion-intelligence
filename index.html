@@ -401,9 +401,52 @@ function SireDetail({sireId,onBack}){
                     <div style={{fontSize:'1.8rem',fontWeight:800,color:'#10b981'}}>{sire.dam_quality_score.toFixed(1)}<span style={{fontSize:'0.9rem',color:'#64748b'}}>/100</span></div>
                 </div>
                 <DamQualityBar label="L1 — Dam's Own Black Type" value={sire.dam_quality_layer1} max={25} color="#f59e0b"/>
-                <DamQualityBar label="L2 — Dam's Produce Record" value={sire.dam_quality_layer2} max={35} color="#10b981"/>
-                <DamQualityBar label="L3 — Second Dam (Grandam)" value={sire.dam_quality_layer3} max={20} color="#3b82f6"/>
-                <DamQualityBar label="L4 — Broodmare Sire Quality" value={sire.dam_quality_layer4} max={20} color="#8b5cf6"/>
+                <DamQualityBar label="L2 — Dam's Produce Record (Stakes-Weighted)" value={sire.dam_quality_layer2} max={40} color="#10b981"/>
+                <DamQualityBar label="L3 — Second Dam (Grandam)" value={sire.dam_quality_layer3} max={18} color="#3b82f6"/>
+                <DamQualityBar label="L4 — Broodmare Sire Quality" value={sire.dam_quality_layer4} max={17} color="#8b5cf6"/>
+            </div>}
+            {dam&&<div style={{background:'#1e293b',padding:'1.25rem',borderRadius:'0.5rem',marginBottom:'1.5rem'}}>
+                <h3 style={{fontSize:'1rem',fontWeight:600,marginBottom:'0.75rem'}}>Foal Record & Stakes Breakdown</h3>
+                {(()=>{
+                    const tf=dam.total_foals||0, ts=dam.total_starters||0, tw=dam.total_winners||0;
+                    const btw=dam.black_type_winners_produced||0, btp=dam.black_type_placers_produced||0;
+                    const gsw=dam.graded_stakes_winners_produced||0, g1=dam.g1_winners_produced||0;
+                    const g2g3=Math.max(gsw-g1,0), listed=Math.max(btw-gsw,0);
+                    const starterPct=tf>0?((ts/tf)*100).toFixed(0):'—';
+                    const winnerPct=ts>0?((tw/ts)*100).toFixed(0):'—';
+                    return <div>
+                        <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'0.75rem',marginBottom:'1rem'}}>
+                            {[['Total Foals',tf],['Starters',ts+' ('+starterPct+'%)'],['Winners',tw+' ('+winnerPct+'%)'],['BT Winners',btw]].map(([l,v])=>
+                                <div key={l} style={{background:'#0f172a',padding:'0.75rem',borderRadius:'0.375rem',textAlign:'center'}}>
+                                    <div style={{fontSize:'0.65rem',color:'#64748b',textTransform:'uppercase',letterSpacing:'0.05em'}}>{l}</div>
+                                    <div style={{fontSize:'1.1rem',fontWeight:700,color:'#f1f5f9',marginTop:'0.25rem'}}>{v}</div>
+                                </div>
+                            )}
+                        </div>
+                        {btw>0&&<div>
+                            <div style={{fontSize:'0.8rem',color:'#94a3b8',fontWeight:600,marginBottom:'0.5rem'}}>Stakes Success by Level</div>
+                            <div style={{display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+                                {g1>0&&<div style={{background:'linear-gradient(135deg,#f59e0b,#d97706)',padding:'0.5rem 0.75rem',borderRadius:'0.375rem',flex:'1 1 auto',minWidth:'100px'}}>
+                                    <div style={{fontSize:'0.65rem',color:'rgba(0,0,0,0.6)',fontWeight:600}}>G1 WINNERS</div>
+                                    <div style={{fontSize:'1.4rem',fontWeight:800,color:'#000'}}>{g1}</div>
+                                </div>}
+                                {g2g3>0&&<div style={{background:'linear-gradient(135deg,#3b82f6,#2563eb)',padding:'0.5rem 0.75rem',borderRadius:'0.375rem',flex:'1 1 auto',minWidth:'100px'}}>
+                                    <div style={{fontSize:'0.65rem',color:'rgba(255,255,255,0.7)',fontWeight:600}}>G2/G3 WINNERS</div>
+                                    <div style={{fontSize:'1.4rem',fontWeight:800,color:'#fff'}}>{g2g3}</div>
+                                </div>}
+                                {listed>0&&<div style={{background:'linear-gradient(135deg,#6366f1,#4f46e5)',padding:'0.5rem 0.75rem',borderRadius:'0.375rem',flex:'1 1 auto',minWidth:'100px'}}>
+                                    <div style={{fontSize:'0.65rem',color:'rgba(255,255,255,0.7)',fontWeight:600}}>LISTED/STAKES</div>
+                                    <div style={{fontSize:'1.4rem',fontWeight:800,color:'#fff'}}>{listed}</div>
+                                </div>}
+                                {btp>0&&<div style={{background:'#334155',padding:'0.5rem 0.75rem',borderRadius:'0.375rem',flex:'1 1 auto',minWidth:'100px'}}>
+                                    <div style={{fontSize:'0.65rem',color:'#94a3b8',fontWeight:600}}>BT PLACERS</div>
+                                    <div style={{fontSize:'1.4rem',fontWeight:800,color:'#cbd5e1'}}>{btp}</div>
+                                </div>}
+                            </div>
+                        </div>}
+                        {btw===0&&<div style={{color:'#64748b',fontSize:'0.85rem',fontStyle:'italic'}}>No black-type winners produced — stakes quality drives the majority of L2 scoring.</div>}
+                    </div>;
+                })()}
             </div>}
             {dam&&<div style={{background:'#1e293b',padding:'1.25rem',borderRadius:'0.5rem',marginBottom:'1.5rem'}}>
                 <h3 style={{fontSize:'1rem',fontWeight:600,marginBottom:'0.75rem'}}>Dam Profile: {dam.name}</h3>
