@@ -390,7 +390,6 @@ function SireDetail({sireId,onBack}){
                 <span>BT/Starters: <b style={{color:'#f59e0b'}}>{((sire.black_type_winners/(sire.total_starters||1))*100).toFixed(1)}%</b></span>
                 {sire.total_foals>0&&<span>Starters/Foals: <b>{((sire.total_starters/(sire.total_foals||1))*100).toFixed(1)}%</b></span>}
             </div></div>}
-        </div>}
 
         {(()=>{const tw=DB.top_winners&&DB.top_winners[String(sire.id)];if(!tw||tw.length===0) return null;const gradeBg=g=>g==='G1'?'linear-gradient(135deg,#f59e0b,#d97706)':g==='G2'?'linear-gradient(135deg,#3b82f6,#2563eb)':g==='G3'?'linear-gradient(135deg,#6366f1,#4f46e5)':'linear-gradient(135deg,#64748b,#475569)';return <div style={{background:'#1e293b',padding:'1.25rem',borderRadius:'0.5rem',marginTop:'1.5rem'}}>
             <h3 style={{fontSize:'1rem',fontWeight:700,marginBottom:'1rem'}}>Top Winners</h3>
@@ -411,6 +410,7 @@ function SireDetail({sireId,onBack}){
                 </div>)}
             </div>
         </div>;})()}
+        </div>}
 
         {/* DAM QUALITY */}
         {tab==='dam'&&<div>
