@@ -107,4 +107,14 @@
   }
 
   console.log('[fix.js] Patched ' + patched + ' sire race records from Equibase-verified data.');
+
+  // Convert DB properties from objects (keyed by ID) to arrays
+  ['sires','dams','race_records','fee_history','dam_quality_scores','pedigree_nodes'].forEach(function(key) {
+    if (DB[key] && !Array.isArray(DB[key])) {
+      DB[key] = Object.values(DB[key]);
+    }
+  });
+  if (DB.data_sources && !Array.isArray(DB.data_sources)) DB.data_sources = Object.values(DB.data_sources);
+  if (DB.sire_names && !Array.isArray(DB.sire_names)) DB.sire_names = Object.values(DB.sire_names);
+  console.log('[fix.js] Converted DB properties to arrays.');
 })();
