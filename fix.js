@@ -73,6 +73,18 @@
   }
   console.log('[fix.js] Applied 55 sire data corrections from verified sources.');
 
+  
+  // Sync race_records with patched sire career data (fixes header vs detail mismatch)
+  for (var sid in DB.sires) {
+    if (DB.race_records && DB.race_records[sid]) {
+      DB.race_records[sid].starts = DB.sires[sid].career_starts;
+      DB.race_records[sid].wins = DB.sires[sid].career_wins;
+      DB.race_records[sid].places = DB.sires[sid].career_places;
+      DB.race_records[sid].shows = DB.sires[sid].career_shows;
+      DB.race_records[sid].career_earnings = DB.sires[sid].career_earnings;
+    }
+  }
+  console.log('[fix.js] Synced race_records with patched sire career data.');
     // Convert DB.sires from object to array (used with .forEach, .find, .length)
     if (DB.sires && !Array.isArray(DB.sires)) {
         DB.sires = Object.values(DB.sires);
