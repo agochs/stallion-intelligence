@@ -6,6 +6,73 @@
   for (var rid in raceFixes) { if (DB.sires[rid]) { var rv = raceFixes[rid]; for (var ri = 0; ri < 5; ri++) DB.sires[rid][raceFixFields[ri]] = rv[ri]; } }
   console.log('[fix.js] Patched 83 sire race records from Equibase data.');
 
+  
+  // Comprehensive data corrections (pedigreegoddess.com 2026 fees, verified March 2026)
+  var dataFixes = {
+    4: {stud_fee_current:100000, black_type_winners:47, graded_stakes_winner_offspring:25},
+    6: {stud_fee_current:0, total_starters:1056},
+    12: {first_crop_racing_year:2024, first_crop_year:2022, first_season_flag:0, stud_fee_current:15000},
+    13: {first_crop_racing_year:2024, first_crop_year:2022, first_season_flag:0, stud_fee_current:100000, year_foaled:2016},
+    14: {first_crop_racing_year:2023, first_crop_year:2021, first_season_flag:0, stud_fee_current:10000, year_foaled:2015},
+    15: {first_crop_racing_year:2023, first_crop_year:2021, first_season_flag:0, stud_fee_current:75000},
+    16: {status:"deceased", stud_fee_current:0},
+    18: {first_crop_racing_year:2023, first_crop_year:2021, first_season_flag:0, stud_fee_current:20000, year_foaled:2016},
+    19: {first_crop_racing_year:2022, first_crop_year:2020, first_season_flag:0, status:"active", stud_farm:"Coolmore/Ashford", stud_fee_current:7500, year_foaled:2014},
+    20: {first_crop_racing_year:2022, first_crop_year:2020, first_season_flag:0, stud_fee_current:25000, year_foaled:2015},
+    21: {first_crop_racing_year:2025, first_crop_year:2023, first_season_flag:0, stud_fee_current:60000, year_foaled:2017},
+    22: {black_type_winners:0, first_crop_racing_year:2026, first_crop_year:2024, first_season_flag:1, g1_winners:0, graded_stakes_winner_offspring:0, status:"active", stud_farm:"Coolmore/Ashford", stud_fee_current:25000, total_starters:0, total_winners:0},
+    23: {first_crop_racing_year:2021, first_crop_year:2019, first_season_flag:0, status:"active", stud_farm:"Calumet Farm", stud_fee_current:7500},
+    24: {black_type_winners:0, first_crop_racing_year:2026, first_crop_year:2024, first_season_flag:1, g1_winners:0, graded_stakes_winner_offspring:0, total_starters:0, total_winners:0},
+    26: {first_crop_racing_year:2015, first_crop_year:2013, first_season_flag:0, year_foaled:2007},
+    27: {first_crop_racing_year:2021, first_crop_year:2019, first_season_flag:0, status:"active", stud_fee_current:10000},
+    28: {first_crop_racing_year:2016, first_crop_year:2014, first_season_flag:0, status:"active", stud_fee_current:10000},
+    29: {first_crop_racing_year:2022, first_crop_year:2020, first_season_flag:0, stud_fee_current:35000},
+    30: {first_crop_racing_year:2019, first_crop_year:2017, first_season_flag:0, status:"active", stud_fee_current:50000, year_foaled:2011},
+    32: {first_crop_racing_year:2019, first_crop_year:2017, first_season_flag:0, status:"active"},
+    33: {black_type_winners:0, first_crop_racing_year:2026, first_crop_year:2024, first_season_flag:1, g1_winners:0, graded_stakes_winner_offspring:0, total_starters:0, total_winners:0},
+    37: {first_crop_racing_year:2023, first_crop_year:2021, first_season_flag:0},
+    40: {black_type_winners:0, first_crop_racing_year:2027, first_crop_year:2025, first_season_flag:0, g1_winners:0, graded_stakes_winner_offspring:0, total_starters:0, total_winners:0, year_foaled:2018},
+    41: {first_crop_racing_year:2025, first_crop_year:2023, first_season_flag:0},
+    42: {first_crop_racing_year:2011, first_crop_year:2009, first_season_flag:0, status:"active"},
+    43: {first_crop_racing_year:2011, first_crop_year:2009, first_season_flag:0, status:"active", stud_fee_current:20000},
+    44: {first_crop_racing_year:2020, first_crop_year:2018, first_season_flag:0, status:"active", stud_fee_current:12500},
+    46: {stud_fee_current:0},
+    47: {first_crop_racing_year:2025, first_crop_year:2023, first_season_flag:0, stud_fee_current:25000, year_foaled:2018},
+    48: {first_crop_racing_year:2022, first_crop_year:2020, first_season_flag:0, stud_fee_current:200000},
+    49: {first_crop_racing_year:2021, first_crop_year:2019, first_season_flag:0, stud_fee_current:75000},
+    50: {black_type_winners:0, first_crop_racing_year:2026, first_crop_year:2024, first_season_flag:1, g1_winners:0, graded_stakes_winner_offspring:0, stud_fee_current:15000, total_starters:0, total_winners:0},
+    51: {first_crop_racing_year:2024, first_crop_year:2022, first_season_flag:0, stud_fee_current:40000},
+    52: {black_type_winners:0, first_crop_racing_year:2026, first_crop_year:2024, first_season_flag:1, g1_winners:0, graded_stakes_winner_offspring:0, stud_fee_current:15000, total_starters:0, total_winners:0},
+    53: {black_type_winners:0, first_crop_racing_year:2029, first_crop_year:2027, first_season_flag:0, g1_winners:0, graded_stakes_winner_offspring:0, total_foals:0, total_starters:0, total_winners:0, year_foaled:2021},
+    54: {black_type_winners:0, first_crop_racing_year:2029, first_crop_year:2027, first_season_flag:0, g1_winners:0, graded_stakes_winner_offspring:0, total_foals:0, total_starters:0, total_winners:0},
+    55: {first_crop_racing_year:2025, first_crop_year:2023, first_season_flag:0, stud_fee_current:25000, year_foaled:2017},
+    56: {black_type_winners:0, first_crop_racing_year:2028, first_crop_year:2026, first_season_flag:0, g1_winners:0, graded_stakes_winner_offspring:0, total_foals:0, total_starters:0, total_winners:0},
+    57: {first_crop_racing_year:2022, first_crop_year:2020, first_season_flag:0, status:"active", stud_fee_current:25000, year_foaled:2014},
+    58: {first_crop_racing_year:2024, first_crop_year:2022, first_season_flag:0, status:"active", stud_fee_current:10000, year_foaled:2016},
+    59: {first_crop_racing_year:2022, first_crop_year:2020, first_season_flag:0, status:"active", stud_fee_current:2500, year_foaled:2014},
+    60: {first_crop_racing_year:2024, first_crop_year:2022, first_season_flag:0, stud_fee_current:75000},
+    61: {status:"active", stud_fee_current:15000, year_foaled:2011},
+    62: {first_crop_racing_year:2010, first_crop_year:2008, first_season_flag:0},
+    63: {first_crop_racing_year:2014, first_crop_year:2012, first_season_flag:0, status:"active", year_foaled:2006},
+    66: {black_type_winners:0, first_crop_racing_year:2029, first_crop_year:2027, first_season_flag:0, g1_winners:0, graded_stakes_winner_offspring:0, total_foals:0, total_starters:0, total_winners:0, year_foaled:2021},
+    67: {first_crop_racing_year:2018, first_crop_year:2016, first_season_flag:0, status:"active", stud_fee_current:10000},
+    68: {first_crop_racing_year:2022, first_crop_year:2020, first_season_flag:0, status:"active", stud_fee_current:30000, year_foaled:2014},
+    69: {black_type_winners:0, first_crop_racing_year:2027, first_crop_year:2025, first_season_flag:0, g1_winners:0, graded_stakes_winner_offspring:0, stud_fee_current:15000, total_starters:0, total_winners:0},
+    70: {black_type_winners:0, first_crop_racing_year:2029, first_crop_year:2027, first_season_flag:0, g1_winners:0, graded_stakes_winner_offspring:0, total_foals:0, total_starters:0, total_winners:0, year_foaled:2022},
+    71: {first_crop_racing_year:2008, first_crop_year:2006, first_season_flag:0, stud_fee_current:60000},
+    84: {first_crop_racing_year:2019, first_crop_year:2017, first_season_flag:0, status:"active"},
+    85: {first_crop_racing_year:2016, first_crop_year:2014, first_season_flag:0, stud_farm:"Hill 'n' Dale", stud_fee_current:30000},
+    86: {first_crop_racing_year:2017, first_crop_year:2015, first_season_flag:0, status:"active", stud_fee_current:30000, year_foaled:2010},
+    87: {first_crop_racing_year:2014, first_crop_year:2012, first_season_flag:0, stud_farm:"Hill 'n' Dale", stud_fee_current:10000, year_foaled:2008}
+  };
+  for (var fid in dataFixes) {
+    if (DB.sires[fid]) {
+      var fx = dataFixes[fid];
+      for (var fk in fx) { DB.sires[fid][fk] = fx[fk]; }
+    }
+  }
+  console.log('[fix.js] Applied 55 sire data corrections from verified sources.');
+
     // Convert DB.sires from object to array (used with .forEach, .find, .length)
     if (DB.sires && !Array.isArray(DB.sires)) {
         DB.sires = Object.values(DB.sires);
