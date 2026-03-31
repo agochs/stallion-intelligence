@@ -238,7 +238,7 @@ function Dashboard({onSelectSire}){
             return sortDir==='desc'?(b[sortCol]||0)-(a[sortCol]||0):(a[sortCol]||0)-(b[sortCol]||0);
         });
         return s;
-    },[search,statusFilter,farmFilter,minFee,maxFee,sortCol,sortDir]);
+    },[search,statusFilter,farmFilter,sireTypeFilter,minFee,maxFee,sortCol,sortDir]);
 
     const toggleSort=c=>{if(sortCol===c)setSortDir(sortDir==='desc'?'asc':'desc');else{setSortCol(c);setSortDir('desc');}};
     const arrow=c=>sortCol===c?(sortDir==='desc'?' \u25BC':' \u25B2'):'';
