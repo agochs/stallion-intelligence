@@ -221,6 +221,7 @@ function Dashboard({onSelectSire}){
     const [farmFilter,setFarmFilter]=useState('');
     const [minFee,setMinFee]=useState('');
     const [maxFee,setMaxFee]=useState('');
+    const [cropFilter, setCropFilter] = React.useState("");
 
     const farms=useMemo(()=>{const c={};DB.sires.forEach(s=>{const f=s.stud_farm||'Unknown';c[f]=(c[f]||0)+1;});return Object.entries(c).sort((a,b)=>b[1]-a[1]);},[]);
 
@@ -231,12 +232,14 @@ function Dashboard({onSelectSire}){
         if(farmFilter) s=s.filter(x=>x.stud_farm===farmFilter);
         if(minFee) s=s.filter(x=>(x.stud_fee_current||0)>=Number(minFee));
         if(maxFee) s=s.filter(x=>(x.stud_fee_current||0)<=Number(maxFee));
+      if(cropFilter === "1st") s=s.filter(x=>x.first_crop_racing_year===2026);
+      if(cropFilter === "2nd") s=s.filter(x=>x.first_crop_racing_year===2025);
         s.sort((a,b)=>{
             if(sortCol==='name') return sortDir==='asc'?a.name.localeCompare(b.name):b.name.localeCompare(a.name);
             return sortDir==='desc'?(b[sortCol]||0)-(a[sortCol]||0):(a[sortCol]||0)-(b[sortCol]||0);
         });
         return s;
-    },[search,statusFilter,farmFilter,minFee,maxFee,sortCol,sortDir]);
+    },[search,statusFilter,farmFilter,minFee,maxFee,cropFilter,sortCol,sortDir]);
 
     const toggleSort=c=>{if(sortCol===c)setSortDir(sortDir==='desc'?'asc':'desc');else{setSortCol(c);setSortDir('desc');}};
     const arrow=c=>sortCol===c?(sortDir==='desc'?' \u25BC':' \u25B2'):'';
@@ -252,6 +255,7 @@ function Dashboard({onSelectSire}){
             <input className="search-input" placeholder="Search stallions, farms…" value={search} onChange={e=>setSearch(e.target.value)}/>
             <select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="">All Status</option><option value="active">Active</option><option value="retired">Retired</option><option value="deceased">Deceased</option><option value="pensioned">Pensioned</option></select>
             <select value={farmFilter} onChange={e=>setFarmFilter(e.target.value)} style={{maxWidth:180}}><option value="">All Farms</option>{farms.map(([f,c])=><option key={f} value={f}>{f} ({c})</option>)}</select>
+            <select value={cropFilter} onChange={e=>setCropFilter(e.target.value)} style={{maxWidth:150}}><option value="">All Sires</option><option value="1st">1st Crop Sires</option><option value="2nd">2nd Crop Sires</option></select>
             <div style={{display:'flex',gap:'0.3rem',alignItems:'center'}}><span style={{fontSize:'0.7rem',color:'#64748b'}}>Fee:</span><input type="number" style={{width:75}} placeholder="Min" value={minFee} onChange={e=>setMinFee(e.target.value)}/><span style={{color:'#475569'}}>–</span><input type="number" style={{width:75}} placeholder="Max" value={maxFee} onChange={e=>setMaxFee(e.target.value)}/></div>
             <div style={{marginLeft:'auto',display:'flex',gap:'0.5rem',alignItems:'center'}}>
                 <span style={{fontSize:'0.8rem',color:'#94a3b8'}}>{filtered.length}</span>
