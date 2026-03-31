@@ -114,7 +114,7 @@ var pf={
 "87":[933,777,584,46,12,2],"88":[638,533,392,27,9,1],"89":[1121,931,695,50,13,4]
 };
 var pk=["total_foals","total_starters","total_winners","black_type_winners","graded_stakes_winner_offspring","g1_winners"];
-for(var id in pf){for(var i=0;i<pk.length;i++){if(pf[id][i]!==null)DB.sires[id][pk[i]]=pf[id][i];}}
+for(var id in pf){for(var i=0;i<pk.length;i++){if(pf[id][i]!==null&&DB.sires[id])DB.sires[id][pk[i]]=pf[id][i];}}
 console.log('[fix.js] Applied production stats corrections for '+Object.keys(pf).length+' sires.');
     // Convert DB.sires from object to array (used with .forEach, .find, .length)
     if (DB.sires && !Array.isArray(DB.sires)) {
