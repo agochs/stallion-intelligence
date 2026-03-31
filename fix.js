@@ -333,7 +333,7 @@ DB.dam_top_producers = {
   // Differentiate first_crop_sire vs first_season_sire (March 2026)
   // First Crop Sires: first 2yos racing 2026 (bred 2023, foals born 2024)
   // First Season Sires: breeding first time 2026 (first_crop_year 2027)
-  var fcIds=[22,24,33,50,52];var fsIds=[53,54,66,70];
-  DB.sires.forEach(function(s){s.first_crop_sire=0;s.first_season_sire=0;if(fcIds.indexOf(s.id)!==-1){s.first_season_flag=0;s.first_crop_sire=1;}if(fsIds.indexOf(s.id)!==-1){s.first_season_sire=1;}});
-  console.log('[fix.js] Differentiated first_crop_sire (5) vs first_season_sire (4).');
+  var fcIds=[22,24,33,50,52];var fsIds=[53,54,66,70];var scIds=[21,41,47,55];
+DB.sires.forEach(function(s){s.first_crop_sire=0;s.first_season_sire=0;s.second_crop_sire=0;if(fcIds.indexOf(s.id)!==-1){s.first_season_flag=0;s.first_crop_sire=1;}if(fsIds.indexOf(s.id)!==-1){s.first_season_sire=1;}if(scIds.indexOf(s.id)!==-1){s.second_crop_sire=1;}});
+console.log('[fix.js] Differentiated first_crop_sire (5), second_crop_sire (4), first_season_sire (4).');
 })();
