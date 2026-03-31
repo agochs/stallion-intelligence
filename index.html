@@ -229,7 +229,7 @@ function Dashboard({onSelectSire}){
     const farms=useMemo(()=>{const c={};DB.sires.forEach(s=>{const f=s.stud_farm||'Unknown';c[f]=(c[f]||0)+1;});return Object.entries(c).sort((a,b)=>b[1]-a[1]);},[]);
 
     const filtered=useMemo(()=>{
-        let s=[...DB.sires];
+        let s=[...DB.sires];s=s.filter(x=>!x.removed);
         if(search){const q=search.toLowerCase();s=s.filter(x=>x.name.toLowerCase().includes(q)||(x.stud_farm||'').toLowerCase().includes(q));}
         if(statusFilter) s=s.filter(x=>x.status===statusFilter);
         if(farmFilter) s=s.filter(x=>x.stud_farm===farmFilter);
@@ -248,7 +248,7 @@ function Dashboard({onSelectSire}){
     return <div style={{maxWidth:1400,margin:'0 auto',padding:'1.5rem'}}>
         <div style={{textAlign:'center',marginBottom:'1.5rem',paddingTop:'0.5rem'}}>
             <h1 style={{fontSize:'1.6rem',fontWeight:800,letterSpacing:'-0.02em'}}>Thoroughbred Stallion Intelligence</h1>
-            <p style={{color:'#94a3b8',fontSize:'0.85rem',marginTop:'0.25rem'}}>{DB.sires.length} stallions across {farms.length} farms</p>
+            <p style={{color:'#94a3b8',fontSize:'0.85rem',marginTop:'0.25rem'}}>{DB.sires.filter(x=>!x.removed).length} stallions across {farms.length} farms</p>
         </div>
 
         {/* Toolbar */}
@@ -538,7 +538,7 @@ function Watchlist({onSelectSire}){
         <button className="btn btn-outline" onClick={()=>window.location.hash='#/'} style={{marginBottom:'1rem'}}>← Dashboard</button>
         <h1 style={{fontSize:'1.5rem',fontWeight:700,marginBottom:'1.5rem'}}>Watchlist</h1>
         <div style={{background:'#1e293b',padding:'1rem',borderRadius:'0.5rem',marginBottom:'1.5rem',display:'flex',gap:'0.75rem',alignItems:'flex-end',flexWrap:'wrap'}}>
-            <div><label style={{fontSize:'0.7rem',color:'#64748b',display:'block',marginBottom:2}}>Sire</label><select value={sel} onChange={e=>setSel(e.target.value)} style={{minWidth:200}}><option value="">Select…</option>{[...DB.sires].sort((a,b)=>a.name.localeCompare(b.name)).map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
+            <div><label style={{fontSize:'0.7rem',color:'#64748b',display:'block',marginBottom:2}}>Sire</label><select value={sel} onChange={e=>setSel(e.target.value)} style={{minWidth:200}}><option value="">Select…</option>{[...DB.sires].filter(x=>!x.removed).sort((a,b)=>a.name.localeCompare(b.name)).map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
             <div style={{flex:1}}><label style={{fontSize:'0.7rem',color:'#64748b',display:'block',marginBottom:2}}>Notes</label><input type="text" value={note} onChange={e=>setNote(e.target.value)} placeholder="e.g. Watch first crop" style={{width:'100%'}}/></div>
             <button className="btn btn-gold" onClick={add}>Add</button>
         </div>
