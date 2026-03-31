@@ -231,7 +231,7 @@ function Dashboard({onSelectSire}){
         if(search){const q=search.toLowerCase();s=s.filter(x=>x.name.toLowerCase().includes(q)||(x.stud_farm||'').toLowerCase().includes(q));}
         if(statusFilter) s=s.filter(x=>x.status===statusFilter);
         if(farmFilter) s=s.filter(x=>x.stud_farm===farmFilter);
-        if(sireTypeFilter==='first_crop') s=s.filter(x=>x.first_crop_sire);if(sireTypeFilter==='first_season') s=s.filter(x=>x.first_season_sire);
+        if(sireTypeFilter==='first_crop') s=s.filter(x=>x.first_crop_sire);if(sireTypeFilter==='first_season') s=s.filter(x=>x.first_season_sire);if(sireTypeFilter==='second_crop') s=s.filter(x=>x.second_crop_sire);
         if(minFee) s=s.filter(x=>(x.stud_fee_current||0)>=Number(minFee));
         if(maxFee) s=s.filter(x=>(x.stud_fee_current||0)<=Number(maxFee));s.sort((a,b)=>{
             if(sortCol==='name') return sortDir==='asc'?a.name.localeCompare(b.name):b.name.localeCompare(a.name);
@@ -254,7 +254,7 @@ function Dashboard({onSelectSire}){
             <input className="search-input" placeholder="Search stallions, farms…" value={search} onChange={e=>setSearch(e.target.value)}/>
             <select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="">All Status</option><option value="active">Active</option><option value="retired">Retired</option><option value="deceased">Deceased</option><option value="pensioned">Pensioned</option></select>
             <select value={farmFilter} onChange={e=>setFarmFilter(e.target.value)} style={{maxWidth:180}}><option value="">All Farms</option>{farms.map(([f,c])=><option key={f} value={f}>{f} ({c})</option>)}</select>
-            <select value={sireTypeFilter} onChange={e=>setSireTypeFilter(e.target.value)}><option value="">All Sires</option><option value="first_crop">First Crop Sires</option><option value="first_season">First Season Sires</option></select>
+            <select value={sireTypeFilter} onChange={e=>setSireTypeFilter(e.target.value)}><option value="">All Sires</option><option value="first_crop">First Crop Sires</option><option value="first_season">First Season Sires</option><option value="second_crop">2nd Crop Sires</option></select>
            
             <div style={{display:'flex',gap:'0.3rem',alignItems:'center'}}><span style={{fontSize:'0.7rem',color:'#64748b'}}>Fee:</span><input type="number" style={{width:75}} placeholder="Min" value={minFee} onChange={e=>setMinFee(e.target.value)}/><span style={{color:'#475569'}}>–</span><input type="number" style={{width:75}} placeholder="Max" value={maxFee} onChange={e=>setMaxFee(e.target.value)}/></div>
             <div style={{marginLeft:'auto',display:'flex',gap:'0.5rem',alignItems:'center'}}>
@@ -279,7 +279,7 @@ function Dashboard({onSelectSire}){
                 <th>Dam</th>
             </tr></thead><tbody>
                 {filtered.map(s=>{const dam=getDam(s);return <tr key={s.id} style={{cursor:'pointer'}} onClick={()=>onSelectSire(s.id)}>
-                    <td style={{fontWeight:700,whiteSpace:'nowrap'}}>{s.name}{s.first_crop_sire?<span className="badge-gold" style={{marginLeft:6,fontSize:'0.6rem'}}>1st Crop</span>:null}{s.first_season_sire?<span className="badge-gold" style={{marginLeft:6,fontSize:'0.6rem'}}>1st Season</span>:null}</td>
+                    <td style={{fontWeight:700,whiteSpace:'nowrap'}}>{s.name}{s.first_crop_sire?<span className="badge-gold" style={{marginLeft:6,fontSize:'0.6rem'}}>1st Crop</span>:null}{s.first_season_sire?<span className="badge-gold" style={{marginLeft:6,fontSize:'0.6rem'}}>1st Season</span>:null}{s.second_crop_sire?<span className="badge-gold" style={{marginLeft:6,fontSize:'0.6rem'}}>2nd Crop</span>:null}</td>
                     <td style={{color:'#10b981',fontWeight:600,whiteSpace:'nowrap'}}>{fmtK(s.stud_fee_current)}</td>
                     <td style={{color:'#94a3b8',fontSize:'0.78rem',maxWidth:130,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{s.stud_farm}</td>
                     <td style={{whiteSpace:'nowrap'}}>{fmtK(s.career_earnings)}</td>
@@ -299,7 +299,7 @@ function Dashboard({onSelectSire}){
                 <div style={{display:'flex',justifyContent:'space-between',marginBottom:'0.5rem'}}><div><h3 style={{fontSize:'1.05rem',fontWeight:700}}>{s.name}</h3><p style={{fontSize:'0.75rem',color:'#94a3b8'}}>{s.year_foaled} • {s.stud_farm}</p></div><div style={{textAlign:'right'}}><div style={{color:'#10b981',fontSize:'1.15rem',fontWeight:700}}>{fmtK(s.stud_fee_current)}</div></div></div>
                 <div style={{display:'flex',gap:'0.75rem',fontSize:'0.78rem',color:'#cbd5e1',marginBottom:'0.5rem'}}><span>{s.career_starts||0}-{s.career_wins||0}-{s.career_places||0}-{s.career_shows||0}</span><span style={{color:'#64748b'}}>|</span><span>{fmtK(s.career_earnings)}</span>{rr&&rr.g1_wins>0&&<><span style={{color:'#64748b'}}>|</span><span style={{color:'#f59e0b'}}>{rr.g1_wins} G1</span></>}</div>
                 <div style={{display:'flex',gap:'0.75rem',fontSize:'0.78rem',color:'#cbd5e1',marginBottom:'0.5rem'}}><span><b style={{color:'#f59e0b'}}>{s.g1_winners||0}</b> G1 offspring</span><span><b>{s.black_type_winners||0}</b> BT</span><span>{fmtN(s.total_starters)} starters</span></div>
-                <div style={{display:'flex',flexWrap:'wrap',gap:'0.25rem',alignItems:'center'}}>{s.first_crop_sire?<span className="badge-gold">1st Crop</span>:null}{s.first_season_sire?<span className="badge-gold">1st Season</span>:null}{s.dam_quality_score&&<span className="badge-emerald">DQ:{s.dam_quality_score.toFixed(0)}</span>}<span className={s.status==='active'?'badge-emerald':'chip'} style={{fontSize:'0.65rem'}}>{s.status}</span>{dam&&<span style={{fontSize:'0.7rem',color:'#64748b'}}>Dam: {dam.name}</span>}</div>
+                <div style={{display:'flex',flexWrap:'wrap',gap:'0.25rem',alignItems:'center'}}>{s.first_crop_sire?<span className="badge-gold">1st Crop</span>:null}{s.first_season_sire?<span className="badge-gold">1st Season</span>:null}{s.second_crop_sire?<span className="badge-gold">2nd Crop</span>:null}{s.dam_quality_score&&<span className="badge-emerald">DQ:{s.dam_quality_score.toFixed(0)}</span>}<span className={s.status==='active'?'badge-emerald':'chip'} style={{fontSize:'0.65rem'}}>{s.status}</span>{dam&&<span style={{fontSize:'0.7rem',color:'#64748b'}}>Dam: {dam.name}</span>}</div>
             </div>;})}
         </div>}
     </div>;
@@ -331,7 +331,7 @@ function SireDetail({sireId,onBack}){
                     <p style={{color:'#cbd5e1',marginTop:'0.25rem'}}>{sire.stud_farm}</p>
                     <div style={{marginTop:'0.5rem',display:'flex',gap:'0.4rem',flexWrap:'wrap'}}>
                         <span className={sire.status==='active'?'badge-emerald':sire.status==='deceased'?'badge-silver':'chip'}>{sire.status}</span>
-                        {sire.first_crop_sire?<span className="badge-gold">First Crop Sire</span>:null}{sire.first_season_sire?<span className="badge-gold">First Season Sire</span>:null}
+                        {sire.first_crop_sire?<span className="badge-gold">First Crop Sire</span>:null}{sire.first_season_sire?<span className="badge-gold">First Season Sire</span>:null}{sire.second_crop_sire?<span className="badge-gold">Second Crop Sire</span>:null}
                     </div>
                 </div>
                 <div style={{textAlign:'right'}}><div style={{color:'#10b981',fontSize:'2.2rem',fontWeight:800}}>{fmt$(sire.stud_fee_current)}</div><div style={{color:'#64748b',fontSize:'0.8rem'}}>Stud Fee</div></div>
