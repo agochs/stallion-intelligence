@@ -234,7 +234,7 @@ var tw={
 "88":[{n:"Pavel",e:2090351,g:"G1W"},{n:"Significant Form",e:817216,g:"G2W"},{n:"Mi Hermano Ramon",e:492640,g:"G2W"},{n:"King Cause",e:831661,g:"G3W"},{n:"My Boy Jack",e:776887,g:"G3W"}],
 "89":[{n:"La Verdad",e:600000,g:"G2W"},{n:"Street Band",e:532000,g:"G2W"}]
 };
-for(var id in tw){DB.top_winners[id]=tw[id];}
+DB.top_winners=DB.top_winners||{};for(var id in tw){DB.top_winners[id]=tw[id];}
 console.log('[fix.js] Applied top_winners corrections for '+Object.keys(tw).length+' sires.');
 
     // Add dam top producers data for Dam Quality tab
