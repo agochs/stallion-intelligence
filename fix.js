@@ -85,6 +85,37 @@
     }
   }
   console.log('[fix.js] Synced race_records with patched sire career data.');
+// Production stats corrections (source: BloodHorse/equineline.com, March 2026)
+// Format: [total_foals, total_starters, total_winners, black_type_winners, graded_stakes_winner_offspring, g1_winners]
+// null = no change for that field
+var pf={
+"1":[1839,1563,1133,195,97,29],"2":[674,481,334,57,37,12],"3":[1434,1103,758,118,68,25],
+"4":[1149,914,663,98,51,17],"5":[1768,1486,1079,170,106,34],"6":[1633,1226,818,117,63,16],
+"7":[725,516,333,41,24,11],"8":[712,511,337,71,37,12],"9":[1066,851,582,31,9,3],
+"10":[1388,1114,786,89,32,6],"11":[442,311,205,22,12,5],"12":[343,null,null,null,null,null],
+"13":[341,212,145,20,8,0],"14":[475,320,213,18,6,1],"15":[488,307,190,26,8,3],
+"18":[400,null,null,null,null,null],"19":[464,331,202,18,6,0],"20":[519,373,237,21,9,1],
+"21":[210,null,null,null,null,null],"26":[1127,882,653,66,29,12],"27":[465,366,220,19,7,1],
+"28":[1035,852,521,38,17,6],"29":[398,287,186,19,6,2],"30":[790,null,null,null,null,null],
+"31":[286,null,null,null,null,null],"32":[840,666,462,53,25,3],"34":[1527,1300,1001,149,69,26],
+"35":[243,null,null,null,null,null],"37":[346,253,157,10,3,1],"41":[150,null,null,null,null,null],
+"42":[1420,1197,833,95,37,9],"43":[1666,1401,954,95,44,12],"44":[708,550,356,31,9,0],
+"45":[1915,1586,1103,186,107,47],"46":[1305,1027,653,76,42,16],"47":[163,null,null,null,null,null],
+"48":[627,432,243,48,22,10],"49":[727,562,386,39,17,5],"51":[284,null,null,null,null,null],
+"55":[201,null,null,null,null,null],"57":[349,209,146,21,4,1],"58":[269,null,null,null,null,null],
+"60":[328,null,null,null,null,null],"61":[362,248,167,21,8,2],"62":[1090,868,640,120,73,25],
+"63":[895,680,475,54,25,7],"64":[378,312,192,4,2,0],"65":[503,379,261,20,5,1],
+"67":[842,682,480,43,10,0],"68":[303,null,null,null,null,null],"71":[1950,1450,1019,115,58,20],
+"72":[843,null,null,null,null,null],"73":[893,692,427,47,23,7],"74":[325,null,null,null,null,null],
+"75":[1668,1297,893,83,40,11],"76":[1714,1356,866,86,46,14],"77":[1795,1529,1164,167,72,18],
+"78":[1956,1570,1085,118,56,16],"79":[2083,1916,1355,144,59,13],"80":[1109,797,524,82,46,16],
+"81":[1367,1074,773,106,59,17],"82":[1565,1328,903,109,52,10],"83":[738,605,400,44,13,3],
+"84":[503,362,248,16,4,1],"85":[982,748,493,46,9,4],"86":[885,708,530,43,15,5],
+"87":[933,777,584,46,12,2],"88":[638,533,392,27,9,1],"89":[1121,931,695,50,13,4]
+};
+var pk=["total_foals","total_starters","total_winners","black_type_winners","graded_stakes_winner_offspring","g1_winners"];
+for(var id in pf){for(var i=0;i<pk.length;i++){if(pf[id][i]!==null)DB.sires[id][pk[i]]=pf[id][i];}}
+console.log('[fix.js] Applied production stats corrections for '+Object.keys(pf).length+' sires.');
     // Convert DB.sires from object to array (used with .forEach, .find, .length)
     if (DB.sires && !Array.isArray(DB.sires)) {
         DB.sires = Object.values(DB.sires);
