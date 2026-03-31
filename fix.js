@@ -329,4 +329,11 @@ DB.dam_top_producers = {
 "88":[{"n":"Creative Cause","e":1220000,"g":"G1","w":"Norfolk S., San Felipe S.","y":2012,"by":"Giant's Causeway"},{"n":"Pavel","e":1020000,"g":"G1","w":"Malibu S., Pat O'Brien S.","y":2017,"by":"Creative Cause"},{"n":"Flagstaff","e":780000,"g":"G1","w":"Churchill Downs S.","y":2021,"by":"Speightstown"}],
 "89":[{"n":"Street Boss","e":470000,"g":"G1","w":"Bing Crosby H.","y":2008,"by":"Street Cry"},{"n":"My Boy Jack","e":1150000,"g":"G3","w":"Lexington S.","y":2018,"by":"Creative Cause"}],
 };
+
+  // Differentiate first_crop_sire vs first_season_sire (March 2026)
+  // First Crop Sires: first 2yos racing 2026 (bred 2023, foals born 2024)
+  // First Season Sires: breeding first time 2026 (first_crop_year 2027)
+  var fcIds=[22,24,33,50,52];var fsIds=[53,54,66,70];
+  DB.sires.forEach(function(s){s.first_crop_sire=0;s.first_season_sire=0;if(fcIds.indexOf(s.id)!==-1){s.first_season_flag=0;s.first_crop_sire=1;}if(fsIds.indexOf(s.id)!==-1){s.first_season_sire=1;}});
+  console.log('[fix.js] Differentiated first_crop_sire (5) vs first_season_sire (4).');
 })();
