@@ -64,7 +64,8 @@
     85: {first_crop_racing_year:2016, first_crop_year:2014, first_season_flag:0, stud_farm:"Hill 'n' Dale", stud_fee_current:30000},
     86: {first_crop_racing_year:2017, first_crop_year:2015, first_season_flag:0, status:"active", stud_fee_current:30000, year_foaled:2010},
     87: {first_crop_racing_year:2014, first_crop_year:2012, first_season_flag:0, stud_farm:"Hill 'n' Dale", stud_fee_current:10000, year_foaled:2008}
-  };
+  ,
+    38: {year_foaled:2014, country_of_birth:"JPN", first_crop_year:2021, first_crop_racing_year:2023, stud_fee_current:10000}};
   for (var fid in dataFixes) {
     if (DB.sires[fid]) {
       var fx = dataFixes[fid];
@@ -233,7 +234,8 @@ var tw={
 "87":[{n:"X Y Jet",e:3096513,g:"G1W"},{n:"World of Trouble",e:1263300,g:"G1W"},{n:"Lagynos",e:2010166,g:"G2W"},{n:"Bay Storm",e:1317690,g:"G2W"},{n:"Bucchero",e:947936,g:"G2W"}],
 "88":[{n:"Pavel",e:2090351,g:"G1W"},{n:"Significant Form",e:817216,g:"G2W"},{n:"Mi Hermano Ramon",e:492640,g:"G2W"},{n:"King Cause",e:831661,g:"G3W"},{n:"My Boy Jack",e:776887,g:"G3W"}],
 "89":[{n:"La Verdad",e:600000,g:"G2W"},{n:"Street Band",e:532000,g:"G2W"}]
-};
+,
+"38":[{n:"Desvio",e:509839,g:"G2W"},{n:"Yo Daddy",e:508459,g:"W"},{n:"Grayosh",e:307718,g:"G2W"},{n:"Yatta",e:251142,g:"W"},{n:"Il Siciliano",e:137170,g:"W"}]};
 DB.top_winners=DB.top_winners||{};for(var id in tw){DB.top_winners[id]=tw[id];}
 console.log('[fix.js] Applied top_winners corrections for '+Object.keys(tw).length+' sires.');
 
