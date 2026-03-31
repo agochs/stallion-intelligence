@@ -65,7 +65,7 @@
     86: {first_crop_racing_year:2017, first_crop_year:2015, first_season_flag:0, status:"active", stud_fee_current:30000, year_foaled:2010},
     87: {first_crop_racing_year:2014, first_crop_year:2012, first_season_flag:0, stud_farm:"Hill 'n' Dale", stud_fee_current:10000, year_foaled:2008}
   ,
-    38: {year_foaled:2014, country_of_birth:"JPN", first_crop_year:2021, first_crop_racing_year:2023, stud_fee_current:10000}};
+    38: {year_foaled:2014, country_of_birth:"JPN", first_crop_year:2021, first_crop_racing_year:2023, stud_fee_current:10000, g1_winners:0}};
   for (var fid in dataFixes) {
     if (DB.sires[fid]) {
       var fx = dataFixes[fid];
