@@ -109,13 +109,13 @@
   console.log('[fix.js] Patched ' + patched + ' sire race records from Equibase-verified data.');
 
   // Convert DB properties from objects (keyed by ID) to arrays
-  ['sires','dams','race_records','fee_history','dam_quality_scores','pedigree_nodes'].forEach(function(key) {
+  ['sires','dams','race_records','fee_history','dam_quality_scores'].forEach(function(key) {
     if (DB[key] && !Array.isArray(DB[key])) {
       DB[key] = Object.values(DB[key]);
     }
   });
   if (DB.data_sources && !Array.isArray(DB.data_sources)) DB.data_sources = Object.values(DB.data_sources);
-  // NOTE: Do NOT convert sire_names to array — it must stay as an object for ID-based lookup
+  // NOTE: Do NOT convert pedigree_nodes or sire_names to array — they must stay as objects for ID-based lookup — it must stay as an object for ID-based lookup
 
   // Build sire_names lookup from sires array (maps sire ID → name)
   DB.sire_names = {};
