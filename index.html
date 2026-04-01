@@ -313,7 +313,7 @@ function SireDetail({sireId,onBack}){
     const sire=DB.sires.find(s=>s.id===Number(sireId));
     const rr=DB.race_records[String(sireId)];
     const feeH=(DB.fee_history[String(sireId)]||[]).sort((a,b)=>a.year-b.year);
-    const sources=DB.data_sources['sire_'+sireId]||[];
+    const sources=(DB.data_sources&&DB.data_sources['sire_'+sireId])||[];
     const dam=sire?getDam(sire):null;
     if(!sire) return <div style={{padding:'3rem',textAlign:'center'}}><p>Sire not found.</p><button className="btn btn-outline" onClick={onBack}>Back</button></div>;
     const sireName=sire.sire_id?DB.sire_names[String(sire.sire_id)]:null;
