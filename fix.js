@@ -1,4 +1,4 @@
-// fix.js — Equibase-verified race record corrections
+// fix.js â Equibase-verified race record corrections
 // Source: equibase.com horse profiles, verified March 2026
 // Patches DB.sires career_starts, career_wins, career_places, career_shows, career_earnings
 // Only horses with confirmed mismatches are patched. "Not This Time" (#8) could not be found on Equibase.
@@ -109,21 +109,60 @@
   console.log('[fix.js] Patched ' + patched + ' sire race records from Equibase-verified data.');
 
   // Convert DB properties from objects (keyed by ID) to arrays
-  ['sires','dams','race_records','fee_history','dam_quality_scores'].forEach(function(key) {
+  ['sires','race_records','fee_history','dam_quality_scores'].forEach(function(key) {
     if (DB[key] && !Array.isArray(DB[key])) {
       DB[key] = Object.values(DB[key]);
     }
   });
   if (DB.data_sources && !Array.isArray(DB.data_sources)) DB.data_sources = Object.values(DB.data_sources);
-  // NOTE: Do NOT convert pedigree_nodes or sire_names to array — they must stay as objects for ID-based lookup — it must stay as an object for ID-based lookup
+  // NOTE: Do NOT convert sire_names to array â it must stay as an object for ID-based lookup
 
-  // Build sire_names lookup from sires array (maps sire ID → name)
+  // Build sire_names lookup from sires array (maps sire ID â name)
   DB.sire_names = {};
   var siresArr = Array.isArray(DB.sires) ? DB.sires : Object.values(DB.sires || {});
   for (var i = 0; i < siresArr.length; i++) {
     DB.sire_names[String(siresArr[i].id)] = siresArr[i].name;
   }
   console.log('[fix.js] Built sire_names lookup with ' + Object.keys(DB.sire_names).length + ' entries.');
+
+  // Fill in missing sire display names from pedigree data
+  // For stallions with null sire_id (sire not in DB), extract sire/dam/BMS names from pedigree nodes
+  var pn = DB.pedigree_nodes || {};
+  var siresArr2 = Array.isArray(DB.sires) ? DB.sires : Object.values(DB.sires || {});
+  var pedigreePatched = 0;
+  for (var i = 0; i < siresArr2.length; i++) {
+    var s = siresArr2[i];
+    var nodes = pn[String(s.id)];
+    if (!nodes || !nodes.length) continue;
+    // Build a quick pathâname map for this stallion's pedigree
+    var pathMap = {};
+    for (var j = 0; j < nodes.length; j++) {
+      pathMap[nodes[j].tree_path] = nodes[j].horse_name;
+    }
+    // If sire_id is null but pedigree has sire name, store it in sire_names with a synthetic key
+    if (!s.sire_id && pathMap['RS']) {
+      var syntheticKey = 'pedigree_sire_' + s.id;
+      DB.sire_names[syntheticKey] = pathMap['RS'];
+      s.sire_id = syntheticKey;
+      pedigreePatched++;
+    }
+    // If dam_sire_id is null but pedigree has broodmare sire, store similarly
+    if (!s.dam_sire_id && pathMap['RDS']) {
+      var bmsKey = 'pedigree_bms_' + s.id;
+      DB.sire_names[bmsKey] = pathMap['RDS'];
+      s.dam_sire_id = bmsKey;
+    }
+    // If dam name is missing, fill from pedigree
+    if (s.dam_id) {
+      var damObj = DB.dams ? DB.dams[String(s.dam_id)] : null;
+      if (!damObj && pathMap['RD']) {
+        // Dam record doesn't exist â create a minimal one
+        if (!DB.dams) DB.dams = {};
+        DB.dams[String(s.dam_id)] = {id: s.dam_id, name: pathMap['RD']};
+      }
+    }
+  }
+  console.log('[fix.js] Filled ' + pedigreePatched + ' missing sire names from pedigree data.');
 
   console.log('[fix.js] Converted DB properties to arrays.');
 })();
